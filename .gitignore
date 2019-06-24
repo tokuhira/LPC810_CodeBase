@@ -109,6 +109,7 @@ local.properties
 .worksheet
 
 # More
+*.axf
 *.bin
 *.ld
 /Release/
