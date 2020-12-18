@@ -44,14 +44,15 @@
   __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
 #endif
 
-#define LED_LOCATION    (2)
+#define LED_LOCATION    (1)
+#define USE_LED
 
 /* This define should be enabled if you want to      */
 /* maintain an SWD/debug connection to the LPC810,   */
 /* but it will prevent you from having access to the */
 /* LED on the LPC810 Mini Board, which is on the     */
 /* SWDIO pin (PIO0_2).                               */
-// #define USE_SWD
+#define USE_SWD
 
 void configurePins()
 {
@@ -70,8 +71,8 @@ void configurePins()
        PIO0_5 = RESET
        PIO0_4 = U0_TXD
        PIO0_3 = GPIO            - Disables SWDCLK
-       PIO0_2 = GPIO (User LED) - Disables SWDIO
-       PIO0_1 = GPIO
+       PIO0_2 = GPIO            - Disables SWDIO
+       PIO0_1 = GPIO (User LED)
        PIO0_0 = U0_RXD
        ------------------------------------------------
        NOTE: SWD is disabled to free GPIO pins!
@@ -84,7 +85,7 @@ void configurePins()
        PIO0_4 = U0_TXD
        PIO0_3 = SWDCLK
        PIO0_2 = SWDIO
-       PIO0_1 = GPIO
+       PIO0_1 = GPIO (User LED)
        PIO0_0 = U0_RXD
        ------------------------------------------------
        NOTE: LED on PIO0_2 unavailable due to SWDIO!
@@ -108,13 +109,13 @@ int main(void)
   configurePins();
 
   /* Set the LED pin to output (1 = output, 0 = input) */
-  #if !defined(USE_SWD)
+  #if defined(USE_LED)
     LPC_GPIO_PORT->DIR0 |= (1 << LED_LOCATION);
   #endif
 
   while(1)
   {
-    #if !defined(USE_SWD)
+    #if defined(USE_LED)
       /* Turn LED Off by setting the GPIO pin high */
       LPC_GPIO_PORT->SET0 = 1 << LED_LOCATION;
       mrtDelay(500);
